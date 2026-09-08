@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SingleViewMemoryNet - Knee MRI Multi-label Classification</title>
+    <meta
+      name="description"
+      content="Project page for Bridging 2D Efficiency and 3D Context: A Memory-Guided Framework for Knee MRI Multi-label Classification."
+    />
+    <meta property="og:title" content="SingleViewMemoryNet" />
+    <meta
+      property="og:description"
+      content="A lightweight, memory-guided knee MRI framework for ACL and meniscus tear classification."
+    />
+    <link rel="stylesheet" href="styles.css?v=5" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="#top" aria-label="SingleViewMemoryNet home">
+        <span class="brand-mark"></span>
+        <span>SingleViewMemoryNet</span>
+      </a>
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a href="#method">Method</a>
+        <a href="#results">Results</a>
+        <a href="#visuals">Visuals</a>
+        <a href="#citation">Citation</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="hero">
+        <div class="hero-copy">
+          <div class="conference-row">
+            <span>ICIP 2026 submission</span>
+            <span>Medical image analysis</span>
+          </div>
+          <h1>Bridging 2D Efficiency and 3D Context</h1>
+          <p class="subtitle">
+            A memory-guided framework for knee MRI multi-label classification that keeps
+            a fast 2D backbone while recovering volumetric context for ACL and meniscus
+            tear diagnosis.
+          </p>
+          <p class="authors">
+            Khang Le Minh, Huy Minh Nhat Nguyen, Cuong Tuan Nguyen
+            <span>Vietnamese German University</span>
+          </p>
+          <div class="actions">
+            <a class="button primary" href="assets/paper.pdf">Paper</a>
+            <a
+              class="button"
+              href="https://github.com/Khangle-2006/Knee_MRI_Memory_Guided_Framework"
+              target="_blank"
+              rel="noreferrer"
+              >Code</a
+            >
+            <a class="button" href="assets/poster.pdf">Poster</a>
+          </div>
+        </div>
+        <div class="hero-visual" aria-label="Project highlights">
+          <div class="hero-logos">
+            <img src="assets/vgu_logo.png" alt="Vietnamese German University logo" />
+            <img src="assets/icip2026.png" alt="ICIP 2026 logo" />
+          </div>
+          <img class="pipeline-preview" src="assets/figures/pipeline.png" alt="SingleViewMemoryNet architecture pipeline" />
+          <div class="metric-strip" aria-label="Main result metrics">
+            <div>
+              <strong>0.951</strong>
+              <span>ACL AUC</span>
+            </div>
+            <div>
+              <strong>0.838</strong>
+              <span>Meniscus AUC</span>
+            </div>
+            <div>
+              <strong>32.24 ms</strong>
+              <span>Inference per scan</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="abstract">
+        <div class="section-heading">
+          <p>Abstract</p>
+          <h2>Lightweight MRI diagnosis with explainable evidence.</h2>
+        </div>
+        <div class="abstract-grid">
+          <p>
+            Knee MRI diagnosis is difficult because ACL and meniscus injuries may be
+            subtle, sparse, and visually close to surrounding soft tissue. Full 3D models
+            can capture context, but they are often expensive and harder to deploy.
+          </p>
+          <p>
+            SingleViewMemoryNet bridges this gap by combining multi-scale center crops,
+            a RadImageNet-pretrained 2D backbone, depth-aware attention, and task-aware
+            memory. The result is a compact model that predicts ACL and meniscus tears
+            while highlighting the anatomical evidence behind its decisions.
+          </p>
+        </div>
+      </section>
+
+      <section class="section compact">
+        <div class="stat-card teal">
+          <span>Task</span>
+          <strong>Multi-label knee MRI</strong>
+          <p>ACL tear and meniscus tear prediction from single-view MRI sequences.</p>
+        </div>
+        <div class="stat-card blue">
+          <span>Backbone</span>
+          <strong>Frozen ResNet-18</strong>
+          <p>RadImageNet initialization limits trainable parameters and overfitting.</p>
+        </div>
+        <div class="stat-card coral">
+          <span>Memory</span>
+          <strong>Task-specific prototypes</strong>
+          <p>Separate ACL and meniscus banks retrieve diagnostic visual patterns.</p>
+        </div>
+        <div class="stat-card gold">
+          <span>Evidence</span>
+          <strong>Grad-CAM + IoU</strong>
+          <p>Attention maps align with lesion regions annotated by physicians.</p>
+        </div>
+      </section>
+
+      <section class="section split" id="method">
+        <div class="section-heading">
+          <p>Method</p>
+          <h2>Single-view speed, volumetric reasoning.</h2>
+        </div>
+        <div class="feature-panel wide">
+          <img src="assets/figures/pipeline.png" alt="Full SingleViewMemoryNet pipeline" />
+          <div>
+            <h3>Full architecture</h3>
+            <p>
+              MRI slices pass through a RadImageNet-pretrained ResNet-18 with CBAM,
+              are aggregated by depth attention, and then enter a task-aware memory
+              module. ACL and meniscus features are refined separately before the final
+              multi-label classifier.
+            </p>
+          </div>
+        </div>
+        <div class="method-cards">
+          <article>
+            <h3>Multi-scale center crops</h3>
+            <p>Global, mid-level, and close-up views mimic radiologists zooming toward anatomy.</p>
+          </article>
+          <article>
+            <h3>Depth-aware attention</h3>
+            <p>Slice weights emphasize informative frames instead of averaging all slices equally.</p>
+          </article>
+          <article>
+            <h3>Task-aware memory</h3>
+            <p>Separate memory banks reduce interference between ACL and meniscus evidence.</p>
+          </article>
+          <article>
+            <h3>Multi-label output</h3>
+            <p>ACL and meniscus probabilities are predicted together while preserving task-specific evidence paths.</p>
+          </article>
+        </div>
+        <div class="feature-panel reverse">
+          <div>
+            <h3>Depth attention module</h3>
+            <p>
+              Spatial GAP creates slice descriptors, a bottleneck estimates attention
+              scores, and the reweighted volume is summed into a compact 2D feature map.
+            </p>
+          </div>
+          <img src="assets/figures/depth_attention.png" alt="Depth Attention module pipeline" />
+        </div>
+      </section>
+
+      <section class="section" id="results">
+        <div class="section-heading">
+          <p>Results</p>
+          <h2>Competitive accuracy with deployable runtime.</h2>
+        </div>
+        <div class="results-grid">
+          <article class="result-card">
+            <h3>MRNet sagittal validation</h3>
+            <div class="score-list">
+              <div><span>ACL AUC</span><strong>0.951</strong></div>
+              <div><span>ACL ACC</span><strong>0.902</strong></div>
+              <div><span>Meniscus AUC</span><strong>0.838</strong></div>
+              <div><span>Meniscus ACC</span><strong>0.805</strong></div>
+            </div>
+          </article>
+          <article class="result-card">
+            <h3>Generalization</h3>
+            <div class="score-list">
+              <div><span>Axial ACL AUC</span><strong>0.9604</strong></div>
+              <div><span>Coronal ACL AUC</span><strong>0.9537</strong></div>
+              <div><span>KneeMRI ACL AUC</span><strong>0.9226</strong></div>
+              <div><span>Coronal meniscus AUC</span><strong>0.8618</strong></div>
+            </div>
+          </article>
+        </div>
+        <div class="figure-grid">
+          <figure>
+            <img src="assets/figures/auc_vs_flops.png" alt="AUC versus FLOPs comparison" />
+            <figcaption>AUC versus computational complexity across sagittal-view models.</figcaption>
+          </figure>
+          <figure>
+            <img src="assets/figures/roc_curve.png" alt="ROC curves for ACL and meniscus tears" />
+            <figcaption>ROC curves show strong separation for ACL and meniscus tear detection.</figcaption>
+          </figure>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <caption>Performance on MRNet validation set</caption>
+            <thead>
+              <tr>
+                <th>Pathology</th>
+                <th>Method</th>
+                <th>AUC</th>
+                <th>ACC</th>
+                <th>Sens.</th>
+                <th>Spec.</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>ACL</td><td>MRNet</td><td>0.824</td><td>0.754</td><td>0.827</td><td>0.826</td></tr>
+              <tr><td>ACL</td><td>MVGNN</td><td>0.883</td><td>0.808</td><td>0.848</td><td>0.759</td></tr>
+              <tr class="ours"><td>ACL</td><td>Ours</td><td>0.951</td><td>0.902</td><td>0.852</td><td>0.944</td></tr>
+              <tr><td>Meniscus</td><td>MRNet</td><td>0.745</td><td>0.620</td><td>0.550</td><td>0.700</td></tr>
+              <tr><td>Meniscus</td><td>MVGNN</td><td>0.802</td><td>0.790</td><td>0.653</td><td>0.758</td></tr>
+              <tr class="ours"><td>Meniscus</td><td>Ours</td><td>0.838</td><td>0.805</td><td>0.846</td><td>0.765</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section" id="visuals">
+        <div class="section-heading">
+          <p>Interpretability</p>
+          <h2>From score to visible diagnostic evidence.</h2>
+        </div>
+        <div class="feature-panel">
+          <img src="assets/figures/memory_dictionary.png" alt="Visual memory dictionary for ACL tear detection" />
+          <div>
+            <h3>Visual memory dictionary</h3>
+            <p>
+              The memory slots act like learned diagnostic prototypes. High-activation
+              patches capture edema-like hyperintensity and structural ligament changes,
+              helping the classifier reference recurring pathology-specific patterns.
+            </p>
+          </div>
+        </div>
+        <div class="iou-grid">
+          <figure><img src="assets/iou/iou_1173.png" alt="IoU localization case 1173" /><figcaption>Case 1173, IoU 0.6</figcaption></figure>
+          <figure><img src="assets/iou/iou_1174.png" alt="IoU localization case 1174" /><figcaption>Case 1174, IoU 0.7</figcaption></figure>
+          <figure><img src="assets/iou/iou_1178.png" alt="IoU localization case 1178" /><figcaption>Case 1178, IoU 0.6</figcaption></figure>
+          <figure><img src="assets/iou/iou_1183.png" alt="IoU localization case 1183" /><figcaption>Case 1183, IoU 0.8</figcaption></figure>
+        </div>
+        <div class="gallery-header">
+          <h3>Grad-CAM views</h3>
+          <div class="filters" aria-label="Filter Grad-CAM gallery">
+            <button class="filter active" data-filter="all" type="button">All</button>
+            <button class="filter" data-filter="sagittal" type="button">Sagittal</button>
+            <button class="filter" data-filter="axial" type="button">Axial</button>
+            <button class="filter" data-filter="coronal" type="button">Coronal</button>
+          </div>
+        </div>
+        <div class="gradcam-grid">
+          <figure data-view="sagittal"><img src="assets/gradcam/cropped/sag_acl_109.png" alt="Sagittal ACL Grad-CAM case 109" /><figcaption>Sagittal ACL, case 109</figcaption></figure>
+          <figure data-view="sagittal"><img src="assets/gradcam/cropped/sag_men_109.png" alt="Sagittal meniscus Grad-CAM case 109" /><figcaption>Sagittal meniscus, case 109</figcaption></figure>
+          <figure data-view="sagittal"><img src="assets/gradcam/cropped/sag_acl_69.png" alt="Sagittal ACL Grad-CAM case 69" /><figcaption>Sagittal ACL, case 69</figcaption></figure>
+          <figure data-view="sagittal"><img src="assets/gradcam/cropped/sag_men_50.png" alt="Sagittal meniscus Grad-CAM case 50" /><figcaption>Sagittal meniscus, case 50</figcaption></figure>
+          <figure data-view="axial"><img src="assets/gradcam/cropped/axial_acl_77.png" alt="Axial ACL Grad-CAM case 77" /><figcaption>Axial ACL, case 77</figcaption></figure>
+          <figure data-view="axial"><img src="assets/gradcam/cropped/axial_men_77.png" alt="Axial meniscus Grad-CAM case 77" /><figcaption>Axial meniscus, case 77</figcaption></figure>
+          <figure data-view="axial"><img src="assets/gradcam/cropped/axial_acl_58.png" alt="Axial ACL Grad-CAM case 58" /><figcaption>Axial ACL, case 58</figcaption></figure>
+          <figure data-view="axial"><img src="assets/gradcam/cropped/axial_men_103.png" alt="Axial meniscus Grad-CAM case 103" /><figcaption>Axial meniscus, case 103</figcaption></figure>
+          <figure data-view="axial"><img src="assets/gradcam/cropped/axial_acl_79.png" alt="Axial ACL Grad-CAM case 79" /><figcaption>Axial ACL, case 79</figcaption></figure>
+          <figure data-view="axial"><img src="assets/gradcam/cropped/axial_men_85.png" alt="Axial meniscus Grad-CAM case 85" /><figcaption>Axial meniscus, case 85</figcaption></figure>
+          <figure data-view="coronal"><img src="assets/gradcam/cropped/coronal_acl_77.png" alt="Coronal ACL Grad-CAM case 77" /><figcaption>Coronal ACL, case 77</figcaption></figure>
+          <figure data-view="coronal"><img src="assets/gradcam/cropped/coronal_men_77.png" alt="Coronal meniscus Grad-CAM case 77" /><figcaption>Coronal meniscus, case 77</figcaption></figure>
+          <figure data-view="coronal"><img src="assets/gradcam/cropped/coronal_acl_103.png" alt="Coronal ACL Grad-CAM case 103" /><figcaption>Coronal ACL, case 103</figcaption></figure>
+          <figure data-view="coronal"><img src="assets/gradcam/cropped/coronal_men_58.png" alt="Coronal meniscus Grad-CAM case 58" /><figcaption>Coronal meniscus, case 58</figcaption></figure>
+          <figure data-view="coronal"><img src="assets/gradcam/cropped/coronal_acl_49.png" alt="Coronal ACL Grad-CAM case 49" /><figcaption>Coronal ACL, case 49</figcaption></figure>
+          <figure data-view="coronal"><img src="assets/gradcam/cropped/coronal_men_59.png" alt="Coronal meniscus Grad-CAM case 59" /><figcaption>Coronal meniscus, case 59</figcaption></figure>
+        </div>
+      </section>
+
+      <section class="section closing" id="citation">
+        <div class="section-heading">
+          <p>Citation</p>
+          <h2>Reference the project.</h2>
+        </div>
+        <pre id="bibtex">@inproceedings{le2026singleviewmemorynet,
+  title={Bridging 2D Efficiency and 3D Context: A Memory-Guided Framework for Knee MRI Multi-label Classification},
+  author={Le Minh, Khang and Nguyen, Huy Minh Nhat and Nguyen, Cuong Tuan},
+  booktitle={IEEE International Conference on Image Processing},
+  year={2026}
+}</pre>
+        <button class="button primary" id="copyCitation" type="button">Copy BibTeX</button>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>If you have any questions, please contact us at <a href="mailto:104240055@student.vgu.edu.vn">104240055@student.vgu.edu.vn</a>.</p>
+    </footer>
+
+    <script src="script.js?v=5"></script>
+  </body>
+</html>
